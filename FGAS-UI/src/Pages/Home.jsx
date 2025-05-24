@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import ReactTypingEffect from 'react-typing-effect'
+import { Link, Navigate } from 'react-router-dom'
+import ReactTypingEffect from 'react-typing-effect';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [currentImage, setCurrentImage] = useState(0)
@@ -9,6 +10,7 @@ const Home = () => {
     '/images/farming2.jpg',
     '/images/farming3.jpg'
   ]
+  const Navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -43,7 +45,7 @@ const Home = () => {
               <Link to="/" className="hover:text-green-200 transition-colors hover:scale-105 transform">Home</Link>
               <Link to="/about" className="hover:text-green-200 transition-colors hover:scale-105 transform">About</Link>
               <Link to="/contact" className="hover:text-green-200 transition-colors hover:scale-105 transform">Contact</Link>
-              <button className="bg-white text-green-600 px-6 py-2 rounded-full hover:bg-green-100 transition-all duration-300 font-semibold hover:shadow-lg transform hover:scale-105">
+              <button className="bg-white text-green-600 px-6 py-2 rounded-full hover:bg-green-100 transition-all duration-300 font-semibold hover:shadow-lg transform hover:scale-105" onClick={Navigate("/login")}>
                 Login
               </button>
             </div>
