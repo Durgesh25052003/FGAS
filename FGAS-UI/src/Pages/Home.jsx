@@ -45,7 +45,8 @@ const Home = () => {
               <Link to="/" className="hover:text-green-200 transition-colors hover:scale-105 transform">Home</Link>
               <Link to="/about" className="hover:text-green-200 transition-colors hover:scale-105 transform">About</Link>
               <Link to="/contact" className="hover:text-green-200 transition-colors hover:scale-105 transform">Contact</Link>
-              <button className="bg-white text-green-600 px-6 py-2 rounded-full hover:bg-green-100 transition-all duration-300 font-semibold hover:shadow-lg transform hover:scale-105" onClick={Navigate("/login")}>
+              <button className="bg-white text-green-600 px-6 py-2 rounded-full hover:bg-green-100 transition-all duration-300 font-semibold hover:shadow-lg transform hover:scale-105" onClick={()=>{
+                Navigate("/login")}}>
                 Login
               </button>
             </div>

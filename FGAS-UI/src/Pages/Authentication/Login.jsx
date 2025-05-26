@@ -21,7 +21,7 @@ const Login = () => {
       const userDoc=await getDoc(useRef);
       const userRole=userDoc.data().role;
       if(userRole==="admin"){
-       console.log("Admin"); 
+       navigate("/admin");
       }
       else if(userRole==="user"){
         alert("User");
