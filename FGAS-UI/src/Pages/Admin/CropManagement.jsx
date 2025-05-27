@@ -1,23 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaFilter, FaImage } from 'react-icons/fa';
 import { Image } from 'cloudinary-react';
 import axios from 'axios';
-import { db } from '../../../config';
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../../../config';
+import { addDoc, collection, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore';
 import toast from 'react-hot-toast';
+import { getAuth } from 'firebase/auth';
 
 const CropManagement = () => {
-  const [crops, setCrops] = useState([
-    {
-      id: 1,
-      name: "Wheat",
-      season: "Rabi",
-      idealTemp: "20-25°C",
-      waterRequirement: "450-650mm",
-      soilType: "Loamy",
-      imageUrl: "sample_image_url"
-    }
-  ]);
+  const [crops, setCrops] = useState([]);
+
+
+  const fetchCrops = async () => {
+    const querySnapshot = await getDocs(collection(db, "crops"));
+
+    const crops = querySnapshot.docs.map((doc) => ({
+      id: doc.id,         // ⭐ this is important
+      ...doc.data(),      // get all crop fields
+    }));
+    setCrops(crops);
+  }
+
+  useEffect(()=>{
+    fetchCrops();
+  })
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [imageSelected, setImageSelected] = useState("");
@@ -61,10 +67,11 @@ const CropManagement = () => {
       e.preventDefault();
       const cropsCollectionRef = collection(db, 'crops');
       console.log(newCrop)
+      console.log(auth.currentUser);
       await addDoc(cropsCollectionRef, newCrop);
       console.log("Document written successfully!")
       console.log(newCrop);
-      await setDoc(doc(db, "crops"), newCrop);
+      setCrops(prev => [...prev, newCrop])
       toast.success('Crop Added successfully');
 
       setShowAddModal(false);
@@ -74,6 +81,14 @@ const CropManagement = () => {
     }
   }
 
+  const handleDeleteCrop = async (cropId) => {
+    try {
+      await deleteDoc(doc(db, "crops", cropId));
+      toast.success('Crop deleted successfully');
+    }catch(error){
+      console.log(error);
+    } 
+  }
 
   return (
     <div className="p-8">
@@ -132,7 +147,7 @@ const CropManagement = () => {
                 <button className="text-blue-600 hover:text-blue-900">
                   <FaEdit />
                 </button>
-                <button className="text-red-600 hover:text-red-900">
+                <button className="text-red-600 hover:text-red-900" onClick={()=>handleDeleteCrop(crop.id)}>
                   <FaTrash />
                 </button>
               </div>
