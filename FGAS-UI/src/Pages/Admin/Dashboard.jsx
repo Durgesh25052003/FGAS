@@ -51,7 +51,7 @@ const AdminDashboard = () => {
             <FaUsers className="text-xl" />
             <span>Farmer Database</span>
           </Link>
-          <Link to="/admin/regions" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/20 transition-all">
+          <Link to="/admin/regions" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/20 transition-all cursor-pointer" onClick={navigate("/admin/regions")}>
             <FaMapMarkerAlt className="text-xl" />
             <span>Regional Data</span>
           </Link>

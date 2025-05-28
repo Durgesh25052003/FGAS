@@ -6,6 +6,7 @@ import Register from './Pages/Authentication/Register'
 import AdminDashboard from './Pages/Admin/Dashboard'
 import SchemeManagement from './Pages/Admin/SchemeManagement'
 import CropManagement from './Pages/Admin/CropManagement'
+import RegionalCropData from './Pages/Admin/RegionalCropData'
 
 const router=createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router=createBrowserRouter([
   {
     path:'/admin/crops',
     element:<CropManagement/>
+  },
+  {
+    path:'/admin/regions',
+    element:<RegionalCropData/>
   }
 ])
 
