@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   FaUsers, 
@@ -12,10 +12,36 @@ import {
   FaRupeeSign
 } from 'react-icons/fa';
 import { useNavigate } from'react-router-dom';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../../config';
 
 const AdminDashboard = () => {
 
   const navigate=useNavigate();
+  const [applications,setApplications]=React.useState([]);
+  const [farmers,setFarmers]=React.useState([]);
+  const [schemes,setSchemes]=React.useState([]);
+  const [crops,setCrops]=useState([]);
+
+  const getFarmers=async()=>{
+    const farmers= await getDocs(collection(db,'farmers'));
+  }
+
+  const getSchemes=async()=>{
+    const schemes= await getDocs(collection(db,'schemes'));
+    console.log(schemes.docs.map((doc)=>doc.data()));
+    setSchemes(schemes.docs.map((doc)=>doc.data()));
+  }
+
+  const getCrops=async()=>{
+    const crops= await getDocs(collection(db,'crops'));
+    setCrops(crops.docs.map((doc)=>doc.data()));
+  }
+
+  useEffect(()=>{
+    getSchemes()
+  })
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white font-poppins">
@@ -43,15 +69,21 @@ const AdminDashboard = () => {
             <FaSeedling className="text-xl" />
             <span>Crop Database</span>
           </Link>
-          <Link to="/admin/applications" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/20 transition-all">
+          <Link to="/admin/applications" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/20 transition-all" onClick={()=>{
+            navigate('/admin/applications');
+          }}>
             <FaClipboardList className="text-xl" />
             <span>Applications</span>
           </Link>
-          <Link to="/admin/users" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/20 transition-all">
+          <Link to="/admin/users" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/20 transition-all" onClick={()=>{
+            navigate('/admin/farmers')
+          }}>
             <FaUsers className="text-xl" />
             <span>Farmer Database</span>
           </Link>
-          <Link to="/admin/regions" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/20 transition-all cursor-pointer" onClick={navigate("/admin/regions")}>
+          <Link to="/admin/regions" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/20 transition-all cursor-pointer" onClick={()=>{
+            navigate("/admin/regions")
+            }}>
             <FaMapMarkerAlt className="text-xl" />
             <span>Regional Data</span>
           </Link>
@@ -74,7 +106,10 @@ const AdminDashboard = () => {
                 className="px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 w-64"
               />
             </div>
-            <button className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition-colors">
+            <button className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition-colors" onClick={()=>{
+              navigate('/login')
+            }
+            }>
               Logout
             </button>
           </div>
@@ -96,7 +131,9 @@ const AdminDashboard = () => {
               <h3 className="text-lg font-semibold text-gray-600">Active Schemes</h3>
               <FaFileAlt className="text-2xl text-green-600" />
             </div>
-            <p className="text-3xl font-bold text-green-600">18</p>
+            <p className="text-3xl font-bold text-green-600">{
+              schemes.length
+              }</p>
             <p className="text-sm text-gray-500 mt-2">3 new this month</p>
           </div>
 
@@ -127,12 +164,18 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-2 gap-4">
               <button className="p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors text-left">
                 <FaFileAlt className="text-green-600 mb-2" />
-                <h4 className="font-semibold">Add New Scheme</h4>
+                <Link className="font-semibold" onClick={()=>{
+                  navigate('/admin/schemes');
+                }}>Add New Scheme</Link>
                 <p className="text-sm text-gray-500">Create new government scheme</p>
               </button>
               <button className="p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors text-left">
                 <FaSeedling className="text-green-600 mb-2" />
-                <h4 className="font-semibold">Update Crop Data</h4>
+                <Link className="font-semibold" onClick={
+                  ()=>{
+                    navigate('/admin/crops');
+                  }
+                }>Update Crop Data</Link>
                 <p className="text-sm text-gray-500">Manage crop information</p>
               </button>
               <button className="p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors text-left">
