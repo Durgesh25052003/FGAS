@@ -9,6 +9,9 @@ import CropManagement from './Pages/Admin/CropManagement'
 import RegionalCropData from './Pages/Admin/RegionalCropData'
 import Applications from './Pages/Admin/Applications'
 import Farmers from './Pages/Admin/Farmers'
+import UserDashboard from './Pages/User/UserDashboard'
+import UserApplications from './Pages/User/UserApplications'
+import UserSchemes from './Pages/User/UserSchemes'
 
 const router=createBrowserRouter([
   {
@@ -46,6 +49,18 @@ const router=createBrowserRouter([
   {
     path:"/admin/farmers",
     element:<Farmers/>
+  },
+  {
+    path:"/user/:id",
+    element:<UserDashboard/>
+  },
+  {
+    path:"/user/applications/:id",
+    element:<UserApplications/>
+  },
+  {
+    path:"/user/schemes/:id",
+    element:<UserSchemes/>
   }
 ])
 
